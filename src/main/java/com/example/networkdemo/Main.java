@@ -90,18 +90,7 @@ public class Main extends Application {
                         });
 
                         switch (messageType) {
-                            /*
-                            //Typess type = HumanTypes.CREATE_GAME;
-                            Object message = new Message("single", HumanTypes.CREATE_GAME);
-
-                            // Downcast message from Object
-                            Message msg = (Message)message;
-                            System.out.println("sending: " + msg.getType().getDescription());
-
-                            //Object msg = message;
-                            // Send the message to the server
-                            toServer.writeObject(message);
-                             */
+                            
                             case CREATE_GAME: handler.gameCreatedHandler(messageReceived);
                                 break;
                             case MAKE_MOVE: handler.makeMoveHandler(messageReceived);
@@ -110,7 +99,7 @@ public class Main extends Application {
                                 break;
                             case REMATCH_ACCEPT: handler.rematchAcceptHandler(messageReceived);
                                 break;
-                            case REMATCH_REJECTED: handler.rematchRejectHandler(messageReceived);
+                            case REMATCH_REJECT: handler.rematchRejectHandler(messageReceived);
                                 break;
                         }
 
@@ -124,32 +113,7 @@ public class Main extends Application {
                 }
             });
             sendMessage.start();
-/*
-        Thread readMessage = new Thread( () -> {
-            while (true) {
-                try {
-                    switch (handlerNumber) {
-                        case 1:
-                            handler.gameCreatedHandler(message);
-                            break;
-                        case 2: handler.makeMoveHandler(message);
-                            break;
-                        case 3: handler.quitHandler(message);
-                            break;
-                        case 4: handler.rematchAcceptHandler(message);
-                            break;
-                        case 5: handler.rematchRejectHandler(message);
-                            break;
-                    }
-//                        Thread.sleep(100);
-                } catch (IOException ex) {
-                    System.out.println("Server Disconnected");
-                    break;
-                }
-            }
-        });
-        readMessage.start();
-*/
+
 
     }
 
