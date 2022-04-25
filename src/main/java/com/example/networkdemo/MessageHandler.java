@@ -63,18 +63,30 @@ class MessageHandler extends GameController {
         }
         sendMessage();  // send moveMade or moveRejected message
 
+        // print out the board to test
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++)
+                System.out.print(Board.getGrid()[i][j] + " ");
+            System.out.println();
+        }
+
 
         // check if there's a winner or a tie
         if(win(token)) {
+            // reset board
+            GameController.Board.restartState();
             // send winner message (contains Winner -> token, room_id)
             Winner winner = new Winner(token,current_room_id); // a winner object
             messageToSend = new Message(winner, WINNER); // create message to send
+            sendMessage();  // send message created above
         }
         if(isFull(GameController.Board.getGrid()) && !win(token)){
+            // reset board
+            GameController.Board.restartState();
             // send tie message (contains room_id)
             messageToSend = new Message(current_room_id, TIE);
+            sendMessage();  // send message created above
         }
-        sendMessage();  // send message created above
     }
 
 
