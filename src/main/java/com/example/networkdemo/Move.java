@@ -1,8 +1,10 @@
 package com.example.networkdemo;
 
+import java.io.Serializable;
+
 // a class for a move on the board.
 // ex: Move(0,1, 'x') represents board[0][1] with token 'x'
-public class Move {
+public class Move implements Serializable {
     private int x;
     private int y;
     private char token;
