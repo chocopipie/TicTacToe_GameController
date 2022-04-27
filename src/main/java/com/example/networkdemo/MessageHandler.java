@@ -10,7 +10,7 @@ class MessageHandler extends GameController {
 
     Message current_message;  // current message
     Object messageToSend;
-    private String current_room_id;
+    private String current_room_id = "noIDfornow";
     ObjectOutputStream toServer;
     ObjectInputStream fromServer;
 
@@ -33,11 +33,12 @@ class MessageHandler extends GameController {
     //
     // data will contain room id
     public void gameCreatedHandler(Message message) throws IOException {
-        current_room_id = (String) message.getData();
+        //current_room_id = (String) message.getData();
         GameController.Board.restartState();
 
         //send gameCreated message (to game launcher, contains room_id)
-        messageToSend = new Message(current_room_id, GAME_CREATED);  // create message to send
+        // MULTIGAME_CREATED is temporarily used instead of GAME_CREATED
+        messageToSend = new Message(current_room_id, MULTIGAME_CREATED);  // create message to send
         sendMessage();
     }
 
@@ -47,7 +48,7 @@ class MessageHandler extends GameController {
         int x = currentMove.getX();
         int y = currentMove.getY();
         char token = currentMove.getToken();
-        current_room_id = currentMove.getRoom_id();
+        //current_room_id = currentMove.getRoom_id();
 
         // if the cell is empty, make the move
         if (GameController.Board.getValueOfGrid(x,y) == ' ') {
@@ -76,8 +77,7 @@ class MessageHandler extends GameController {
             // reset board
             GameController.Board.restartState();
             // send winner message (contains Winner -> token, room_id)
-            Winner winner = new Winner(token,current_room_id); // a winner object
-            messageToSend = new Message(winner, WINNER); // create message to send
+             messageToSend = new Message(token, WINNER); // create message to send
             sendMessage();  // send message created above
         }
         if(isFull(GameController.Board.getGrid()) && !win(token)){
@@ -91,7 +91,7 @@ class MessageHandler extends GameController {
 
 
     public void quitHandler(Message message) throws IOException {
-        current_room_id = (String) message.getData();
+        //current_room_id = (String) message.getData();
         GameController.Board.restartState();
         // send gameOver (to gameLauncher)
         messageToSend = new Message(current_room_id, GAME_OVER);
@@ -99,7 +99,7 @@ class MessageHandler extends GameController {
     }
 
     public void rematchAcceptHandler(Message message) throws IOException {
-        current_room_id = (String) message.getData();
+        //current_room_id = (String) message.getData();
         GameController.Board.restartState();
         // send rematchAccepted
         messageToSend = new Message(current_room_id, REMATCH_ACCEPTED);
@@ -107,7 +107,7 @@ class MessageHandler extends GameController {
     }
 
     public void rematchRejectHandler(Message message) throws IOException {
-        current_room_id = (String) message.getData();
+        //current_room_id = (String) message.getData();
         GameController.Board.restartState();
         // send rematchRejected
         messageToSend = new Message(current_room_id, REMATCH_REJECTED);

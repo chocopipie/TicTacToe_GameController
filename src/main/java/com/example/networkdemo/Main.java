@@ -72,7 +72,8 @@ public class Main extends Application {
 
                         switch (messageType) {
 
-                            case CREATE_GAME: handler.gameCreatedHandler(messageReceived);
+                            // CREATE_MULTIGAME is temporarily used instead of CREATE_GAME
+                            case CREATE_MULTIGAME: handler.gameCreatedHandler(messageReceived);
                                 break;
                             case MAKE_MOVE: handler.makeMoveHandler(messageReceived);
                                 break;
