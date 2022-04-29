@@ -13,7 +13,7 @@ class MessageHandler extends GameController {
     private String current_room_id = "noIDfornow";
     ObjectOutputStream toServer;
     ObjectInputStream fromServer;
-    char currentToken = 'X';
+    //char currentToken = 'O';
 
     MessageHandler(ObjectOutputStream toServer, ObjectInputStream fromServer) {
         this.toServer = toServer;
@@ -33,17 +33,9 @@ class MessageHandler extends GameController {
     // for those methods below, message will be passed in as parameter
     //
     // data will contain room id
-    public void gameCreatedHandler(Message message) throws IOException {
+    public void gameCreatedHandler() throws IOException {
         //current_room_id = (String) message.getData();
         GameController.Board.restartState();
-
-        //send gameCreated message (to game launcher, contains room_id)
-        // MULTIGAME_CREATED is temporarily used instead of GAME_CREATED
-        messageToSend = new Message(current_room_id, MULTIGAME_CREATED);  // create message to send
-        sendMessage();
-        // send player's turn - always default as X for first move
-        messageToSend = new Message(currentToken, PLAYER_TURN);
-        sendMessage();
     }
 
     // data will contain the move (x and y)
@@ -80,12 +72,12 @@ class MessageHandler extends GameController {
             else {
                 // if move is made and no one wins or game continues, switch player's turn
                 // switch current token
-                if (currentToken == 'X')
-                    currentToken = 'O';
-                else if (currentToken == 'O')
-                    currentToken = 'X';
+                if (token == 'X')
+                    token = 'O';
+                else if (token == 'O')
+                    token = 'X';
                 // send other player's turn
-                messageToSend = new Message(currentToken, PLAYER_TURN);
+                messageToSend = new Message(token, PLAYER_TURN);
                 sendMessage();
             }
         }

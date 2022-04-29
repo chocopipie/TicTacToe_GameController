@@ -15,6 +15,9 @@ public enum HumanTypes implements Typess{
     //Responses back
     SOLOGAME_CREATED("New solo-game is created"),
     MULTIGAME_CREATED("New multi-game is created"),
+    ROOM_ADDED ("New room added"),
+    JOIN_SUCCESS("You joined the game"),
+    JOIN_FAIL("This room is occupied"),
     MOVE_MADE ("Current move"),
     PLAYER_TURN("Player's turn"),
     MOVE_REJECTED("Invalid move"),
