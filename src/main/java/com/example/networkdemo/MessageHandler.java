@@ -13,6 +13,7 @@ class MessageHandler extends GameController {
     private String current_room_id = "noIDfornow";
     ObjectOutputStream toServer;
     ObjectInputStream fromServer;
+    char currentToken = 'X';
 
     MessageHandler(ObjectOutputStream toServer, ObjectInputStream fromServer) {
         this.toServer = toServer;
@@ -40,6 +41,9 @@ class MessageHandler extends GameController {
         // MULTIGAME_CREATED is temporarily used instead of GAME_CREATED
         messageToSend = new Message(current_room_id, MULTIGAME_CREATED);  // create message to send
         sendMessage();
+        // send player's turn - always default as X for first move
+        messageToSend = new Message(currentToken, PLAYER_TURN);
+        sendMessage();
     }
 
     // data will contain the move (x and y)
@@ -56,13 +60,41 @@ class MessageHandler extends GameController {
             GameController.Board.setTokenOnGrid(x,y,token);
             // send moveMade (contains Move -> x,y,token)
             messageToSend = new Message(currentMove, MOVE_MADE);  // create message to send
+            sendMessage();  // send moveMade or moveRejected message
 
+            // check if there's a winner or a tie
+            if(win(token)) {
+                // reset board
+                GameController.Board.restartState();
+                // send winner message (contains Winner -> token, room_id)
+                messageToSend = new Message(token, WINNER); // create message to send
+                sendMessage();  // send message created above
+            }
+            else if(isFull(GameController.Board.getGrid()) && !win(token)){
+                // reset board
+                GameController.Board.restartState();
+                // send tie message (contains room_id)
+                messageToSend = new Message(current_room_id, TIE);
+                sendMessage();  // send message created above
+            }
+            else {
+                // if move is made and no one wins or game continues, switch player's turn
+                // switch current token
+                if (currentToken == 'X')
+                    currentToken = 'O';
+                else if (currentToken == 'O')
+                    currentToken = 'X';
+                // send other player's turn
+                messageToSend = new Message(currentToken, PLAYER_TURN);
+                sendMessage();
+            }
         }
         else {
             // send moveRejected (contains room_id)
             messageToSend = new Message(current_room_id, MOVE_REJECTED); // create message to send
+            sendMessage();  // send moveMade or moveRejected message
         }
-        sendMessage();  // send moveMade or moveRejected message
+
 
         // print out the board to test
         for (int i = 0; i < 3; i++) {
@@ -72,21 +104,7 @@ class MessageHandler extends GameController {
         }
 
 
-        // check if there's a winner or a tie
-        if(win(token)) {
-            // reset board
-            GameController.Board.restartState();
-            // send winner message (contains Winner -> token, room_id)
-             messageToSend = new Message(token, WINNER); // create message to send
-            sendMessage();  // send message created above
-        }
-        if(isFull(GameController.Board.getGrid()) && !win(token)){
-            // reset board
-            GameController.Board.restartState();
-            // send tie message (contains room_id)
-            messageToSend = new Message(current_room_id, TIE);
-            sendMessage();  // send message created above
-        }
+
     }
 
 
