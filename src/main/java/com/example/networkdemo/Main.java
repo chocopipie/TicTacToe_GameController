@@ -72,7 +72,9 @@ public class Main extends Application {
 
                         switch (messageType) {
 
-                            case CREATE_GAME: handler.gameCreatedHandler(messageReceived);
+                            case MULTIGAME_CREATED:
+                            case JOIN_SUCCESS:
+                                handler.gameCreatedHandler();
                                 break;
                             case MAKE_MOVE: handler.makeMoveHandler(messageReceived);
                                 break;
@@ -85,7 +87,7 @@ public class Main extends Application {
                         }
 
                     } catch (IOException ex) {
-                        System.out.println("Server Disconnected");
+                        System.out.println("Invalid input");
                         break;
                     }
                     catch (ClassNotFoundException ex){
