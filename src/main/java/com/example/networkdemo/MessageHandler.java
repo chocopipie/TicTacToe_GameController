@@ -5,12 +5,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import static com.example.networkdemo.HumanTypes.*;
+import static com.example.networkdemo.Main.boardList;
 
 class MessageHandler extends GameController {
 
     Message current_message;  // current message
     Object messageToSend;
-    private String current_room_id = "noIDfornow";
+    Board currentBoard = new Board();
+    private String current_room_id;
     ObjectOutputStream toServer;
     ObjectInputStream fromServer;
     //char currentToken = 'O';
@@ -33,9 +35,18 @@ class MessageHandler extends GameController {
     // for those methods below, message will be passed in as parameter
     //
     // data will contain room id
-    public void gameCreatedHandler() throws IOException {
-        //current_room_id = (String) message.getData();
-        GameController.Board.restartState();
+    public void gameCreatedHandler(Message message) throws IOException {
+        RoomList roomList = (RoomList) message.getData();
+        current_room_id = roomList.getGameRoomList().get(roomList.size()-1).getRoomID();
+        //GameRoom currentRoom = (GameRoom) message.getData();
+        //current_room_id = currentRoom.getRoomID();
+        System.out.println(current_room_id);
+        currentBoard = new Board();
+        System.out.println("New Board Created");
+        boardList.put(current_room_id,currentBoard);
+        //boardList.get(current_room_id).printBoard();
+
+        boardList.forEach((key, value) -> System.out.println(key));
     }
 
     // data will contain the move (x and y)
@@ -44,27 +55,28 @@ class MessageHandler extends GameController {
         int x = currentMove.getX();
         int y = currentMove.getY();
         char token = currentMove.getToken();
-        //current_room_id = currentMove.getRoom_id();
+        current_room_id = currentMove.getRoom_id();
+        currentBoard = boardList.get(current_room_id);
 
         // if the cell is empty, make the move
-        if (GameController.Board.getValueOfGrid(x,y) == ' ') {
+        if (currentBoard.getValueOfGrid(x,y) == ' ') {
             // update the board
-            GameController.Board.setTokenOnGrid(x,y,token);
+            currentBoard.setTokenOnGrid(x,y,token);
             // send moveMade (contains Move -> x,y,token)
             messageToSend = new Message(currentMove, MOVE_MADE);  // create message to send
             sendMessage();  // send moveMade or moveRejected message
 
             // check if there's a winner or a tie
-            if(win(token)) {
+            if(win(currentBoard,token)) {
                 // reset board
-                GameController.Board.restartState();
+                currentBoard.restartState();
                 // send winner message (contains Winner -> token, room_id)
                 messageToSend = new Message(token, WINNER); // create message to send
                 sendMessage();  // send message created above
             }
-            else if(isFull(GameController.Board.getGrid()) && !win(token)){
+            else if(isFull(currentBoard.getGrid()) && !win(currentBoard,token)){
                 // reset board
-                GameController.Board.restartState();
+                currentBoard.restartState();
                 // send tie message (contains room_id)
                 messageToSend = new Message(current_room_id, TIE);
                 sendMessage();  // send message created above
@@ -91,34 +103,33 @@ class MessageHandler extends GameController {
         // print out the board to test
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++)
-                System.out.print(Board.getGrid()[i][j] + " ");
+                System.out.print(currentBoard.getGrid()[i][j] + " ");
             System.out.println();
         }
-
-
-
     }
 
-
     public void quitHandler(Message message) throws IOException {
-        //current_room_id = (String) message.getData();
-        GameController.Board.restartState();
+        current_room_id = (String) message.getData();
+        currentBoard = boardList.get(current_room_id);
+        currentBoard.restartState();
         // send gameOver (to gameLauncher)
         messageToSend = new Message(current_room_id, GAME_OVER);
         sendMessage();
     }
 
     public void rematchAcceptHandler(Message message) throws IOException {
-        //current_room_id = (String) message.getData();
-        GameController.Board.restartState();
+        current_room_id = (String) message.getData();
+        currentBoard = boardList.get(current_room_id);
+        currentBoard.restartState();
         // send rematchAccepted
         messageToSend = new Message(current_room_id, REMATCH_ACCEPTED);
         sendMessage();
     }
 
     public void rematchRejectHandler(Message message) throws IOException {
-        //current_room_id = (String) message.getData();
-        GameController.Board.restartState();
+        current_room_id = (String) message.getData();
+        currentBoard = boardList.get(current_room_id);
+        currentBoard.restartState();
         // send rematchRejected
         messageToSend = new Message(current_room_id, REMATCH_REJECTED);
         sendMessage();

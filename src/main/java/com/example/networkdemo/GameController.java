@@ -1,11 +1,11 @@
 package com.example.networkdemo;
 
-public class GameController {
+public class GameController extends Board {
 
     //determine if there is a winner
-    public boolean win(char token) {
+    public boolean win(Board board, char token) {
         //across
-        char[][] temp = Board.getGrid();
+        char[][] temp = board.getGrid();
         for (int i = 0; i < 3; i++)
             if (temp[i][0] == token && temp[i][1]  == token && temp[i][2]  == token) {
                 return true;
@@ -39,45 +39,4 @@ public class GameController {
         return true;
     }
 
-
-    // nested class for the board
-    // this class implements Observer interface
-    static class Board implements Observer {
-        private static char[][] grid = new char[][] {
-                { ' ', ' ', ' '},
-                { ' ', ' ', ' '},
-                { ' ', ' ', ' '}};
-
-
-        //update the state of board
-        @Override
-        public void update(char t, int row, int col){
-            grid[row][col] = t;
-        }
-
-
-        //set value onto grid
-        public static void setTokenOnGrid(int x, int y, char token){
-            grid[x][y] = token;
-        }
-
-        //return grid
-        public static char[][] getGrid(){
-            return grid;
-        }
-
-        //return specific value on grid
-        public static char getValueOfGrid(int x, int y){
-            char val = grid[x][y];
-            return val;
-        }
-
-        //initialize board
-        public static void restartState(){
-            grid = new char[][] {{ ' ', ' ', ' '},
-                    { ' ', ' ', ' '},
-                    { ' ', ' ', ' '}};
-        }
-
-    }
 }
