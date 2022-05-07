@@ -16,8 +16,7 @@ public class Main extends Application {
     ObjectOutputStream toServer = null;
     ObjectInputStream fromServer = null;
     MessageHandler handler;
-    static HashMap<String, Board> boardList = new HashMap<String, Board>();
-
+    static Hashtable<String, Board> boardList = new Hashtable<>();
 
     @Override
     public void start(Stage primaryStage) {
@@ -74,8 +73,7 @@ public class Main extends Application {
 
                         switch (messageType) {
 
-                            case ROOM_ADDED:
-                                System.out.println("received");
+                            case MULTIGAME_CREATED:
                                 handler.gameCreatedHandler(messageReceived);
                                 break;
                             case JOIN_SUCCESS:

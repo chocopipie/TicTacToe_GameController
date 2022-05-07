@@ -2,20 +2,20 @@ package com.example.networkdemo;
 
 // nested class for the board
 // this class implements Observer interface
-public class Board implements Observer {
-    private static char[][] grid;
+public class Board {
+    private char[][] grid;
 
     public Board() {
         grid = new char[][] {
-                { 's', ' ', ' '},
                 { ' ', ' ', ' '},
-                { ' ', ' ', 'v'}};
+                { ' ', ' ', ' '},
+                { ' ', ' ', ' '}};
     }
     //update the state of board
-    @Override
-    public void update(char t, int row, int col){
-        grid[row][col] = t;
-    }
+//    @Override
+//    public void update(char t, int row, int col){
+//        grid[row][col] = t;
+//    }
 
 
     //set value onto grid
