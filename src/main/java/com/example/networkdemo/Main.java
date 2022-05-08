@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import java.util.*;
 
 
 public class Main extends Application {
@@ -15,7 +16,7 @@ public class Main extends Application {
     ObjectOutputStream toServer = null;
     ObjectInputStream fromServer = null;
     MessageHandler handler;
-
+    static Hashtable<String, Board> boardList = new Hashtable<>();
 
     @Override
     public void start(Stage primaryStage) {
@@ -73,10 +74,13 @@ public class Main extends Application {
                         switch (messageType) {
 
                             case MULTIGAME_CREATED:
-                            case JOIN_SUCCESS:
-                                handler.gameCreatedHandler();
+                                handler.gameCreatedHandler(messageReceived);
                                 break;
-                            case MAKE_MOVE: handler.makeMoveHandler(messageReceived);
+                            case JOIN_SUCCESS:
+                                //handler.gameCreatedHandler(messageReceived);
+                                break;
+                            case MAKE_MOVE:
+                                handler.makeMoveHandler(messageReceived);
                                 break;
                             case QUIT: handler.quitHandler(messageReceived);
                                 break;

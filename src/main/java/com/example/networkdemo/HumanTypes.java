@@ -4,6 +4,7 @@ public enum HumanTypes implements Typess{
     //options that the user can request to do
     CREATE_SOLOGAME ("REQUEST: Create new single game"),
     CREATE_MULTIGAME("REQUEST: Create new multi game"),
+    SEND_NAME ("REQUEST: Send human player's name"),
     JOIN_GAME ("REQUEST: Join game"),
     MAKE_MOVE ("REQUEST: Make move"),
     QUIT ("REQUEST: Quit Game"),
@@ -16,6 +17,7 @@ public enum HumanTypes implements Typess{
     SOLOGAME_CREATED("New solo-game is created"),
     MULTIGAME_CREATED("New multi-game is created"),
     ROOM_ADDED ("New room added"),
+    ROOM_UPDATED("Room updated"),
     JOIN_SUCCESS("You joined the game"),
     JOIN_FAIL("This room is occupied"),
     MOVE_MADE ("Current move"),
