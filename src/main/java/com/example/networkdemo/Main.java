@@ -88,10 +88,12 @@ public class Main extends Application {
                                 break;
                             case REMATCH_REJECT: handler.rematchRejectHandler(messageReceived);
                                 break;
+                            default:
+                                System.out.println("Message Received: " + messageReceived.getType().getDescription());
                         }
 
                     } catch (IOException ex) {
-                        System.out.println("Invalid input");
+                        ex.printStackTrace();
                         break;
                     }
                     catch (ClassNotFoundException ex){
