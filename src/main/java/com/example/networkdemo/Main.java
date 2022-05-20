@@ -61,6 +61,7 @@ public class Main extends Application {
                         Message messageReceived = (Message)msg;
                         // Downcast humanTypes from Typess
                         HumanTypes messageType = (HumanTypes) messageReceived.getType();
+                        System.out.println(messageType);
 
                         // display the text area
                         Platform.runLater(new Runnable() {
