@@ -11,11 +11,8 @@ class MessageHandler extends GameController {
 
     Message current_message;  // current message
     Object messageToSend;
-    //Board currentBoard = new Board();
-    //private String current_room_id;
     ObjectOutputStream toServer;
     ObjectInputStream fromServer;
-    //char currentToken = 'O';
 
     MessageHandler(ObjectOutputStream toServer, ObjectInputStream fromServer) {
         this.toServer = toServer;
@@ -66,55 +63,57 @@ class MessageHandler extends GameController {
 //        boardList.forEach((key, value) ->
 //                value.printBoard());
 
-        // if the cell is empty, make the move
-        if (currentBoard.getValueOfGrid(x,y) == ' ') {
-            // update the board
-            currentBoard.setTokenOnGrid(x,y,token);  // set token on current board
-            boardList.replace(current_room_id,currentBoard); // update the board list with new token on current board
-            // send moveMade (contains Move -> x,y,token)
-            messageToSend = new Message(currentMove, MOVE_MADE);  // create message to send
-            sendMessage();  // send moveMade or moveRejected message
+        if (currentBoard != null) {
+            // if the cell is empty, make the move
+            if (currentBoard.getValueOfGrid(x,y) == ' ') {
+                // update the board
+                currentBoard.setTokenOnGrid(x,y,token);  // set token on current board
+                boardList.replace(current_room_id,currentBoard); // update the board list with new token on current board
+                // send moveMade (contains Move -> x,y,token)
+                messageToSend = new Message(currentMove, MOVE_MADE);  // create message to send
+                sendMessage();  // send moveMade or moveRejected message
 
-            // check if there's a winner or a tie
-            if(win(currentBoard,token)) {
-                // reset board
-                currentBoard.restartState();
-                // send winner message (contains Winner -> token, room_id)
-                messageToSend = new Message(currentMove, WINNER); // create message to send
-                sendMessage();  // send message created above
-            }
-            else if(isFull(currentBoard.getGrid()) && !win(currentBoard,token)){
-                // reset board
-                currentBoard.restartState();
-                // send tie message (contains room_id)
-                messageToSend = new Message(current_room_id, TIE);
-                sendMessage();  // send message created above
+                // check if there's a winner or a tie
+                if(win(currentBoard,token)) {
+                    // reset board
+                    currentBoard.restartState();
+                    // send winner message (contains Winner -> token, room_id)
+                    messageToSend = new Message(currentMove, WINNER); // create message to send
+                    sendMessage();  // send message created above
+                }
+                else if(isFull(currentBoard.getGrid()) && !win(currentBoard,token)){
+                    // reset board
+                    currentBoard.restartState();
+                    // send tie message (contains room_id)
+                    messageToSend = new Message(current_room_id, TIE);
+                    sendMessage();  // send message created above
+                }
+                else {
+                    // if move is made and no one wins or game continues, switch player's turn
+                    // switch current token
+                    if (token == 'X')
+                        //token = 'O';
+                        currentMove.setToken('O');
+                    else if (token == 'O')
+                        //token = 'X';
+                        currentMove.setToken('X');
+                    // send other player's turn
+                    messageToSend = new Message(currentMove, PLAYER_TURN);
+                    sendMessage();
+                }
             }
             else {
-                // if move is made and no one wins or game continues, switch player's turn
-                // switch current token
-                if (token == 'X')
-                    //token = 'O';
-                    currentMove.setToken('O');
-                else if (token == 'O')
-                    //token = 'X';
-                    currentMove.setToken('X');
-                // send other player's turn
-                //messageToSend = new Message(token, PLAYER_TURN);
-                messageToSend = new Message(currentMove, PLAYER_TURN);
-                sendMessage();
+                // send moveRejected (contains room_id)
+                messageToSend = new Message(current_room_id, MOVE_REJECTED); // create message to send
+                sendMessage();  // send moveMade or moveRejected message
             }
-        }
-        else {
-            // send moveRejected (contains room_id)
-            messageToSend = new Message(current_room_id, MOVE_REJECTED); // create message to send
-            sendMessage();  // send moveMade or moveRejected message
-        }
 
 
-        // print out the board after a move is set
-        System.out.println("This is board : " + current_room_id);
-        boardList.get(current_room_id).printBoard();
+            // print out the board after a move is set
+            System.out.println("This is board : " + current_room_id);
+            boardList.get(current_room_id).printBoard();
+
+        }
 
     }
 
