@@ -141,7 +141,14 @@ class MessageHandler extends GameController {
         Board currentBoard = boardList.get(current_room_id);
         currentBoard.restartState();
         // send rematchRejected
+        //delete board form list
+        boardList.remove(current_room_id);
+
+        boardList.forEach((key, value) -> System.out.println(key));
+
         messageToSend = new Message(current_room_id, REMATCH_REJECTED);
         sendMessage();
+
+
     }
 }
