@@ -23,6 +23,16 @@ public class RoomList implements Serializable  {
                 gameRoomList.get(i).getPlayer2().setUserName(updatedRoom.getPlayer2().getUserName());
         }
     }
+
+    public void removeFromList(String currentRoom){
+        for(int i = 0; i< gameRoomList.size(); i++){
+            if(gameRoomList.get(i).getRoomID().equals(currentRoom)){
+                gameRoomList.remove(gameRoomList.get(i));
+            }
+        }
+
+    }
+
     public void printList() {
         for (int i = 0; i < gameRoomList.size(); i++) {
             GameRoom currentRoom = gameRoomList.get(i);
