@@ -146,4 +146,8 @@ class MessageHandler extends GameController {
         messageToSend = new Message(current_room_id, REMATCH_REJECTED);
         sendMessage();
     }
+
+//    public void playAgainWithAI(Message messageReceived) {
+//
+//    }
 }
