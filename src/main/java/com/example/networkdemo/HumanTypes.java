@@ -4,6 +4,7 @@ public enum HumanTypes implements Typess{
     //options that the user can request to do
     CREATE_SOLOGAME ("REQUEST: Create new single game"),
     CREATE_MULTIGAME("REQUEST: Create new multi game"),
+    SEND_NEW_USERNAME("REQUEST: Send new username"),
     SEND_NAME ("REQUEST: Send human player's name"),
     JOIN_GAME ("REQUEST: Join game"),
     MAKE_MOVE ("REQUEST: Make move"),
@@ -16,6 +17,8 @@ public enum HumanTypes implements Typess{
     SEND_GAMECHANNEL("Sending gamechannel info to new client"),
     LOBBY("request to join lobby"),
     PLAY_AGAIN("REQUEST: Play against computer again"),
+    USERNAME_EXISTS("Username exists"),
+
 
     //Responses back
     SOLOGAME_CREATED("New solo-game is created"),

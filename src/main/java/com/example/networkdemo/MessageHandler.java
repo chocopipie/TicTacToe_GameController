@@ -98,6 +98,8 @@ class MessageHandler extends GameController {
                         //token = 'X';
                         currentMove.setToken('X');
                     // send other player's turn
+
+                    //messageToSend = new Message(token, PLAYER_TURN);
                     messageToSend = new Message(currentMove, PLAYER_TURN);
                     sendMessage();
                 }

@@ -72,7 +72,6 @@ public class Main extends Application {
                         });
 
                         switch (messageType) {
-
                             case MULTIGAME_CREATED:
                                 handler.gameCreatedHandler(messageReceived);
                                 break;
@@ -80,6 +79,7 @@ public class Main extends Application {
                                 //handler.gameCreatedHandler(messageReceived);
                                 break;
                             case MAKE_MOVE:
+                                System.out.println("Received");
                                 handler.makeMoveHandler(messageReceived);
                                 break;
                             case QUIT: handler.quitHandler(messageReceived);
