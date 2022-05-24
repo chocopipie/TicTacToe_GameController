@@ -122,31 +122,37 @@ class MessageHandler extends GameController {
     public void quitHandler(Message message) throws IOException {
         String current_room_id = (String) message.getData();
         Board currentBoard = boardList.get(current_room_id);
-        currentBoard.restartState();
-        // send gameOver (to gameLauncher)
-        messageToSend = new Message(current_room_id, GAME_OVER);
-        sendMessage();
+        if (currentBoard != null) {
+            currentBoard.restartState();
+            // send gameOver (to gameLauncher)
+            messageToSend = new Message(current_room_id, GAME_OVER);
+            sendMessage();
+        }
     }
 
     public void rematchAcceptHandler(Message message) throws IOException {
         String current_room_id = (String) message.getData();
         Board currentBoard = boardList.get(current_room_id);
-        currentBoard.restartState();
-        // send rematchAccepted
-        messageToSend = new Message(current_room_id, REMATCH_ACCEPTED);
-        sendMessage();
+        if (currentBoard != null) {
+            currentBoard.restartState();
+            // send rematchAccepted
+            messageToSend = new Message(current_room_id, REMATCH_ACCEPTED);
+            sendMessage();
+        }
     }
 
     public void rematchRejectHandler(Message message) throws IOException {
         String current_room_id = (String) message.getData();
         Board currentBoard = boardList.get(current_room_id);
-        currentBoard.restartState();
-        // send rematchRejected
-        //delete board form list
-        boardList.remove(current_room_id);
-        boardList.forEach((key, value) -> System.out.println(key));
-        messageToSend = new Message(current_room_id, REMATCH_REJECTED);
-        sendMessage();
+        if (currentBoard != null) {
+            currentBoard.restartState();
+            // send rematchRejected
+            //delete board form list
+            boardList.remove(current_room_id);
+            boardList.forEach((key, value) -> System.out.println(key));
+            messageToSend = new Message(current_room_id, REMATCH_REJECTED);
+            sendMessage();
+        }
     }
 
 //    public void playAgainWithAI(Message messageReceived) {
