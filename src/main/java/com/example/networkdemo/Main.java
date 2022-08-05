@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import java.util.*;
 
 
 public class Main extends Application {
@@ -15,7 +16,7 @@ public class Main extends Application {
     ObjectOutputStream toServer = null;
     ObjectInputStream fromServer = null;
     MessageHandler handler;
-
+    static Hashtable<String, Board> boardList = new Hashtable<>();
 
     @Override
     public void start(Stage primaryStage) {
@@ -71,11 +72,15 @@ public class Main extends Application {
                         });
 
                         switch (messageType) {
-
-                            // CREATE_MULTIGAME is temporarily used instead of CREATE_GAME
-                            case CREATE_MULTIGAME: handler.gameCreatedHandler(messageReceived);
+                            case MULTIGAME_CREATED:
+                                handler.gameCreatedHandler(messageReceived);
                                 break;
-                            case MAKE_MOVE: handler.makeMoveHandler(messageReceived);
+                            case JOIN_SUCCESS:
+                                //handler.gameCreatedHandler(messageReceived);
+                                break;
+                            case MAKE_MOVE:
+                                System.out.println("Received");
+                                handler.makeMoveHandler(messageReceived);
                                 break;
                             case QUIT: handler.quitHandler(messageReceived);
                                 break;
@@ -83,10 +88,12 @@ public class Main extends Application {
                                 break;
                             case REMATCH_REJECT: handler.rematchRejectHandler(messageReceived);
                                 break;
+                            default:
+                                System.out.println("Message Received: " + messageReceived.getType().getDescription());
                         }
 
                     } catch (IOException ex) {
-                        System.out.println("Server Disconnected");
+                        ex.printStackTrace();
                         break;
                     }
                     catch (ClassNotFoundException ex){
